@@ -1,0 +1,12 @@
+spring:
+    application:
+        name: library-management-system
+    jpa:
+        show-sql: true
+        properties:
+          hibernate:
+              format_sql: true
+
+
+server:
+    port: 8081
