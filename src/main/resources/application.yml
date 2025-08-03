@@ -1,3 +1,6 @@
+server:
+    port: 8081
+
 spring:
     application:
         name: library-management-system
@@ -7,6 +10,22 @@ spring:
           hibernate:
               format_sql: true
 
+# CONFIGURACIÓN DE SWAGGER
+springdoc:
+    api-docs:
+        path: /api-docs #Endpoint de las especificaciones OpenAPI en JSON
+        enabled: true
+    swagger-ui:
+        path: /swagger-ui.html #URL de la interfaz de Swagger
+        enabled: true
+        try-it-out-enabled: true #Permitir ejecutar request desde la UI
+        operations-sorter: method #Ordena los endpoint por método HTTP
+        tags-sorter: alpha #Ordenar las secciones alfabéticamente
 
-server:
-    port: 8081
+        # NUEVAS CONFIGURACIONES
+        doc-expansion: none #Los endpoints aparecen colapsados inicialmente
+        default-model-expand-depth: 2 #Nivel de expansión del modelo
+        default-models-expand-depth: 2 #Nivel de expansión de los modelos
+        display-request-duration: true #Muestra el tiempo de respuesta de cada request
+        show-extensions: true #Muestra extensiones adicionales de OpenAPI
+        show-common-extensions: true #Muestra extensiones comunes de OpenAPI
