@@ -157,7 +157,63 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookEntity> updateBook(@PathVariable Long id, @RequestBody BookEntity book){
+    @Operation(
+            summary = "✏️ Actualizar libro existente",
+            description = """
+        Actualiza completamente la información de un libro existente.
+        
+        ### 🔄 Proceso de actualización:
+        1. Busca el libro por ID
+        2. Valida los nuevos datos
+        3. Actualiza todos los campos
+        4. Preserva fechas de creación
+        
+        ### ⚠️ Consideraciones:
+        - El ID no se puede modificar
+        - ISBN debe seguir siendo único
+        - Se actualiza automáticamente la fecha de modificación
+        """
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "✅ Libro actualizado exitosamente",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = BookEntity.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "📭 Libro no encontrado",
+                    content = @Content(mediaType = "application/json")
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "❌ Datos de entrada inválidos",
+                    content = @Content(mediaType = "application/json")
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "⚠️ ISBN ya existe en otro libro",
+                    content = @Content(mediaType = "application/json")
+            )
+    })
+    public ResponseEntity<BookEntity> updateBook(
+            @Parameter(
+                    description = "🆔 ID del libro a actualizar",
+                    required = true,
+                    example = "1",
+                    schema = @Schema(type = "integer", minimum = "1")
+            )
+            @PathVariable Long id,
+            @Parameter(
+                    description = "📖 Nuevos datos del libro",
+                    required = true,
+                    schema = @Schema(implementation = BookEntity.class)
+            )
+            @Valid
+            @RequestBody BookEntity book){
         Optional<BookEntity> newBook = bookService.updateBook(id, book);
         if (newBook.isPresent()){
             return ResponseEntity.ok(newBook.get());
@@ -167,7 +223,44 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBook(@PathVariable Long id){
+    @Operation(
+            summary = "🗑️ Eliminar libro",
+            description = """
+        Elimina permanentemente un libro del catálogo.
+        
+        ### ⚠️ ADVERTENCIA:
+        Esta operación es **irreversible**. El libro se eliminará 
+        completamente de la base de datos.
+        
+        ### 📋 Proceso:
+        1. Verifica que el libro existe
+        2. Elimina el registro de la base de datos
+        3. Retorna confirmación de eliminación
+        
+        ### 💡 Recomendación:
+        Considera implementar "soft delete" en producción.
+        """
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "✅ Libro eliminado exitosamente",
+                    content = @Content()
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "📭 Libro no encontrado",
+                    content = @Content(mediaType = "application/json")
+            )
+    })
+    public ResponseEntity<Void> deleteBook(
+            @Parameter(
+                    description = "🆔 ID del libro a eliminar",
+                    required = true,
+                    example = "1",
+                    schema = @Schema(type = "integer", minimum = "1")
+            )
+            @PathVariable Long id){
         boolean deleted = bookService.deleteBook(id);
 
         if (deleted){
@@ -178,6 +271,32 @@ public class BookController {
     }
 
     @GetMapping("/count")
+    @Operation(
+            summary = "📊 Obtener total de libros",
+            description = """
+        Retorna el número total de libros registrados en el catálogo.
+        
+        ### 📈 Utilidad:
+        - Dashboard de administración
+        - Reportes estadísticos
+        - Monitoreo del crecimiento del catálogo
+        - Validaciones de capacidad
+        """
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "✅ Cantidad obtenida exitosamente",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(
+                                    type = "integer",
+                                    example = "150",
+                                    description = "Número total de libros en el catálogo"
+                            )
+                    )
+            )
+    })
     public long getTotalBooks(){
         return bookService.getTotalBooks();
     }

@@ -17,7 +17,22 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Entidad que representa un libro en la biblioteca")
+@Schema(
+        description = "📚 Entidad que representa un libro en la biblioteca digital",
+        example = """
+        {
+          "id": 1,
+          "name": "Clean Code: A Handbook of Agile Software Craftsmanship",
+          "author": "Robert C. Martin",
+          "isbn": "978-0132350884",
+          "category": "TECNOLOGIA",
+          "available": true,
+          "description": "Guía completa para escribir código limpio y mantenible",
+          "createdAt": "2024-08-02T10:30:00",
+          "updateAt": "2024-08-02T10:30:00"
+        }
+        """
+)
 public class BookEntity {
 
     @Id
