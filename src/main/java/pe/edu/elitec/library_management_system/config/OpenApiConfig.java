@@ -51,6 +51,9 @@ public class OpenApiConfig {
                         new Server()
                                 .url("https://library-api-elitec.railway.app")
                                 .description("☁️ Servidor de Producción (Railway)")
-                ));
+                ))
+                .externalDocs(new io.swagger.v3.oas.models.ExternalDocumentation()
+                        .description("📖 Documentación completa del curso")
+                        .url("https://docs.elitec.edu.pe/library-api"));
     }
 }

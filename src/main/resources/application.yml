@@ -29,3 +29,10 @@ springdoc:
         display-request-duration: true #Muestra el tiempo de respuesta de cada request
         show-extensions: true #Muestra extensiones adicionales de OpenAPI
         show-common-extensions: true #Muestra extensiones comunes de OpenAPI
+
+        # CONFIGURACIONES AVANZADAS
+        disable-swagger-default-url: true #Desactivar URL or defecto de Swagger
+        use-root-path: true #Usar el path raíz para la aplicación
+        csrf:
+            enabled: false
+
